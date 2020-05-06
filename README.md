@@ -11,3 +11,6 @@ raspberry piでvenv環境下で動作するためコンソールで以下のよ�
 
 　export FLASK_APP=UsbMemoryManager.py
 
+最後に以下のコマンドを実行してserverを立ち上げます
+
+ flask run
