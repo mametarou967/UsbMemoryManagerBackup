@@ -15,3 +15,9 @@ raspberry piでvenv環境下で動作するためコンソールで以下のよ�
 ポート0.0.0.0を指定することにより外部公開することになります（参考：https://flask.palletsprojects.com/en/1.1.x/quickstart/)
 
  flask run --host=0.0.0.0
+ 
+# debug機能の有効化
+
+以下のコマンドで有効化されます
+
+ export FLASK_ENV=development
