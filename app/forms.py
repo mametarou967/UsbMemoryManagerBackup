@@ -10,6 +10,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Sign In')
 
 class RegistrationForm(FlaskForm):
+    userId = IntegerField('ID',validators=[NumberRange(min=10000,max=30000,message='Out Of Range')])
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField(
