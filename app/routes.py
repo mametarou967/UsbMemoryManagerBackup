@@ -54,10 +54,15 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(id=form.userId.data,username=form.username.data)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash('Congratulations, you are now a registered user!')
-        return redirect(url_for('login'))
+        user = User.query.filter_by(id=form.userId.data).first()
+        if user is None: # user_idが存在しない場合登録可能
+            user = User(id=form.userId.data,username=form.username.data)
+            user.set_password(form.password.data)
+            db.session.add(user)
+            db.session.commit()
+            flash('Congratulations, you are now a registered user!')
+            return redirect(url_for('login'))
+        else:
+            flash('This ID already exists')
+            return render_template('register.html', title='Register', form=form)
     return render_template('register.html', title='Register', form=form)
