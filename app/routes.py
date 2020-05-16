@@ -3,28 +3,28 @@ from app import app
 from app import db
 from app.forms import LoginForm
 from app.forms import RegistrationForm
-from app.models import User
+from app.models import User,UsbMemory
 from flask_login import current_user, login_user
 from flask_login import logout_user
 from flask_login import login_required
 from werkzeug.urls import url_parse
 
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
-    user = {'username': 'Miguel'}
-    posts = [
-        {
-            'author': {'username': 'John'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'username': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template("index.html", title='Home Page', posts=posts)
+    if request.method == "GET":
+        usbMemorys = UsbMemory.query.all()
+        return render_template("index.html", title='Home Page', usbMemorys = usbMemorys)
+    else: # POST
+        if "loan" in request.form: # 貸出
+            usbMemory = UsbMemory.query.filter_by(usb_number=request.form["loan"]).first()
+            usbMemory.user_id = current_user.id
+            db.session.add(usbMemory)
+            db.session.commit()
+        #elif "ret" in request.form:  返却
+        usbMemorys = UsbMemory.query.all()
+        return render_template("index.html", title='Home Page', usbMemorys = usbMemorys)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

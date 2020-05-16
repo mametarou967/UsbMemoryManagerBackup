@@ -22,27 +22,18 @@ class User(UserMixin,db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-class Loan(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    valid = db.Column(db.Boolean)
-
-    def __repr__(self):
-        return '<Loan id:{0} user_id:{1} valid:{2} time:{3}>'.format(self.id,self.user_id,self.valid,self.timestamp)
-    
-
 class UsbMemory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     usb_number = db.Column(db.Integer)
-    loan_id = db.Column(db.Integer, db.ForeignKey('loan.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return '<UsbMemory id:{0} usb_number:{1} loan_id:{2}>'.format(self.id,self.usb_number,self.loan_id)
+        return '<UsbMemory id:{0} usb_number:{1} user_id:{2}>'.format(self.id,self.usb_number,self.user_id)
 
 class Rireki(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    loan_id = db.Column(db.Integer, db.ForeignKey('loan.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    usbMemory_id = db.Column(db.Integer, db.ForeignKey('usbMemory.id'))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     rireki_id = db.Column(db.Integer)
     
